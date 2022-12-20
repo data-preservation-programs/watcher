@@ -11,3 +11,5 @@ extends:
 env:
   jasmine: true
   node: true
+rules:
+  "@typescript-eslint/no-non-null-assertion": "off"

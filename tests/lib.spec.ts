@@ -1,8 +1,9 @@
-import { hello } from '../src/lib'
+import { action } from '../src/lib'
 
 describe('lib', () => {
-  it('should work', () => {
-    const result = hello()
-    expect(result).toEqual('Hello World')
+  it('should work', async () => {
+    await action({
+      ip: '', correlationId: ''
+    })
   })
 })
