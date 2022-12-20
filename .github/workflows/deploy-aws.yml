@@ -14,15 +14,4 @@ jobs:
           node-version: 16
       - run: npm ci
       - run: npm run release
-      - name: deploy to lambda
-        uses: appleboy/lambda-action@master
-        with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_region: us-west-2
-          function_name: sp-watcher
-          zip_file: release.zip
-          memory_size: 128
-          timeout: 100
-          handler: aws_lambda.handler
-          runtime: nodejs16.x
+      - run: npm run deploy:aws

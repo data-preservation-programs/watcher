@@ -6,6 +6,7 @@
     "lint": "eslint --ext ts --fix .",
     "lint:nofix": "eslint --ext ts .",
     "release": "rm -rf dist && npm run build && cd dist && cp ../package* . && npm i --production && zip -r ../release.zip .",
+    "deploy:aws": "ts-node src/deploy/deploy_lambda.ts",
     "test": "jasmine-ts --config=jasmine.json"
   },
   "repository": {
@@ -33,7 +34,8 @@
     "typescript": "^4.9.4"
   },
   "dependencies": {
-    "@aws-sdk/client-sns": "^3.234.0",
+    "@aws-sdk/client-lambda": "^3.234.0",
+    "@aws-sdk/client-sqs": "^3.234.0",
     "dotenv": "^16.0.3"
   }
 }
