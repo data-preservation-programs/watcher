@@ -4,7 +4,7 @@ import { randomUUID } from 'crypto'
 import * as definition from './deploy/deploy_lambda.json'
 import { Payload } from './types'
 
-export default async function handler (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResult> {
+export async function handler (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResult> {
   if (event.queryStringParameters?.token !== process.env.TOKEN) {
     return {
       statusCode: 403,
