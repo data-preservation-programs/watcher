@@ -3,6 +3,8 @@ import { SendMessageCommand, SQSClient } from '@aws-sdk/client-sqs'
 import { randomUUID } from 'crypto'
 import * as definition from './deploy/deploy_lambda.json'
 import { Payload } from './types'
+import dotenv from 'dotenv'
+dotenv.config()
 
 export async function handler (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResult> {
   if (event.queryStringParameters?.token !== process.env.TOKEN) {
@@ -19,7 +21,6 @@ export async function handler (event: APIGatewayProxyEventV2): Promise<APIGatewa
       body: 'Missing ip'
     }
   }
-  const client = new SQSClient({})
   const correlationId = randomUUID()
   const payload: Payload = {
     ip, correlationId
@@ -30,7 +31,16 @@ export async function handler (event: APIGatewayProxyEventV2): Promise<APIGatewa
       QueueUrl: url,
       MessageBody: JSON.stringify(payload)
     })
-    tasks.push(client.send(command))
+    const region = url.split('.')[1]
+    tasks.push(new SQSClient(
+      {
+        credentials: {
+          accessKeyId: process.env.KEY!,
+          secretAccessKey: process.env.SECRET!
+        },
+        region
+      }
+    ).send(command))
   }
   await Promise.all(tasks)
   return {
