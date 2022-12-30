@@ -1,10 +1,7 @@
 import { Payload } from './types.js'
+import dotenv from 'dotenv'
 import { action } from './lib.js'
+dotenv.config()
 
-const ip = process.argv[2]
-const correlationId = process.argv[3]
-const payload: Payload = {
-  ip, correlationId
-}
-
+const payload = JSON.parse(process.argv[2]) as Payload
 await action(payload)

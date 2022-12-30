@@ -23,5 +23,6 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run build
+      - run: docker build -t watcher:latest .
       - run: npm run lint:nofix
       - run: npm test
