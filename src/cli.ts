@@ -1,5 +1,5 @@
-import { Payload } from './types'
-import { action } from './lib'
+import { Payload } from './types.js'
+import { action } from './lib.js'
 
 const ip = process.argv[2]
 const correlationId = process.argv[3]
@@ -7,4 +7,4 @@ const payload: Payload = {
   ip, correlationId
 }
 
-action(payload)
+await action(payload)

@@ -1,4 +1,4 @@
-import { action } from '../src/lib'
+import { action } from '../src/lib.js'
 
 describe('lib', () => {
   it('should work', async () => {

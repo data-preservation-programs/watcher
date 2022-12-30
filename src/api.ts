@@ -1,8 +1,8 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResult } from 'aws-lambda'
 import { SendMessageCommand, SQSClient } from '@aws-sdk/client-sqs'
 import { randomUUID } from 'crypto'
-import * as definition from './deploy/deploy_lambda.json'
-import { Payload } from './types'
+import definition from './deploy/deploy_lambda.json' assert { type: 'json' }
+import { Payload } from './types.js'
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -15,7 +15,7 @@ export async function handler (event: APIGatewayProxyEventV2): Promise<APIGatewa
   }
 
   const ip = event.queryStringParameters?.ip
-  if (!ip) {
+  if (ip == null) {
     return {
       statusCode: 400,
       body: 'Missing ip'

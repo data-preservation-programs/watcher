@@ -1,6 +1,6 @@
 import { CreateQueueCommand, GetQueueAttributesCommand, ListQueuesCommand, SQS } from '@aws-sdk/client-sqs'
 import dotenv from 'dotenv'
-import * as definition from './deploy_lambda.json'
+import definition from './deploy_lambda.json' assert { type: 'json' }
 import {
   CreateEventSourceMappingCommand,
   CreateFunctionCommand,
@@ -10,15 +10,15 @@ import {
 import * as fs from 'fs'
 dotenv.config()
 
-async function createFunction (region: string, name: string) : Promise<string> {
+async function createFunction (region: string, name: string): Promise<string> {
   const client = new Lambda({ region })
   const listCommand = new ListFunctionsCommand({ MaxItems: 1000 })
   const listResponse = await client.send(listCommand)
   const code = fs.readFileSync('release.zip')
-  for (const func of listResponse.Functions || []) {
+  for (const func of listResponse.Functions ?? []) {
     const existing = func.FunctionName
     if (name === existing) {
-      console.log(`Function ${name} already exists in ${region}: ${func.FunctionArn}`)
+      console.log(`Function ${name} already exists in ${region}: ${func.FunctionArn!}`)
       const updateCommand = new UpdateFunctionCodeCommand({
         FunctionName: name,
         ZipFile: code
@@ -44,16 +44,16 @@ async function createFunction (region: string, name: string) : Promise<string> {
     }
   })
   const createResponse = await client.send(createCommand)
-  const functionArn = createResponse.FunctionArn
+  const functionArn = createResponse.FunctionArn!
   console.log(`Created function ${name} in ${region}: ${functionArn}`)
-  return functionArn!
+  return functionArn
 }
 
 async function createTrigger (region: string, functionArn: string, queueArn: string): Promise<void> {
   const client = new Lambda({ region })
   const listEventCommand = new ListEventSourceMappingsCommand({ FunctionName: functionArn })
   const listEventResponse = await client.send(listEventCommand)
-  for (const mapping of listEventResponse.EventSourceMappings || []) {
+  for (const mapping of listEventResponse.EventSourceMappings ?? []) {
     if (mapping.EventSourceArn === queueArn) {
       console.log(`Mapping already exists for ${functionArn} and ${queueArn}`)
       return
@@ -71,11 +71,11 @@ async function createTrigger (region: string, functionArn: string, queueArn: str
   console.log(`Added ${queueArn} to ${functionArn} as trigger`)
 }
 
-async function createQueue (region: string, name:string): Promise<string> {
+async function createQueue (region: string, name: string): Promise<string> {
   const client = new SQS({ region })
   const listCommand = new ListQueuesCommand({ MaxResults: 1000 })
   const listResponse = await client.send(listCommand)
-  for (const queue of listResponse.QueueUrls || []) {
+  for (const queue of listResponse.QueueUrls ?? []) {
     const existing = queue.split('/').pop()
     if (name === existing) {
       console.log(`Queue ${name} already exists in ${region}: ${queue}`)
@@ -106,7 +106,7 @@ async function createQueue (region: string, name:string): Promise<string> {
     }
   })
   const response = await client.send(createCommand)
-  console.log(`Created queue ${name} in ${region}: ${response.QueueUrl}`)
+  console.log(`Created queue ${name} in ${region}: ${response.QueueUrl!}`)
   return response.QueueUrl!
 }
 
@@ -120,7 +120,7 @@ async function getQueueArn (region: string, queueUrl: string): Promise<string> {
   return response.Attributes!.QueueArn!
 }
 
-async function deploy () {
+async function deploy (): Promise<void> {
   const queues = []
   for (const region of definition.regions) {
     const name = definition.queue_prefix + '-' + region
@@ -136,4 +136,4 @@ async function deploy () {
     console.log(queue)
   }
 }
-deploy()
+await deploy()

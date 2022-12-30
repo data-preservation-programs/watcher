@@ -1,15 +1,12 @@
-root: true
-parser: '@typescript-eslint/parser'
-plugins:
-  - '@typescript-eslint'
-  - jasmine
-extends:
-  - 'eslint:recommended'
-  - 'plugin:@typescript-eslint/eslint-recommended'
-  - 'plugin:@typescript-eslint/recommended'
-  - 'standard'
 env:
-  jasmine: true
+  es2021: true
   node: true
+  jasmine: true
+extends: standard-with-typescript
+overrides: []
+parserOptions:
+  ecmaVersion: 2021
+  sourceType: module
+  project: tsconfig.json
 rules:
-  "@typescript-eslint/no-non-null-assertion": "off"
+  '@typescript-eslint/no-non-null-assertion': off

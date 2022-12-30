@@ -5,10 +5,11 @@
     "build": "tsc",
     "lint": "eslint --ext ts --fix .",
     "lint:nofix": "eslint --ext ts .",
-    "release": "rm -rf dist && npm run build && cd dist && cp ../package* . && npm i --production && zip -r ../release.zip .",
+    "release": "rm -rf dist && npm run build && cd dist/src && cp ../../package* . && npm i --production && zip -r ../../release.zip .",
     "deploy:aws": "ts-node src/deploy/deploy_lambda.ts",
-    "test": "jasmine-ts --config=jasmine.json"
+    "test": "jasmine --config=jasmine.json"
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/data-preservation-programs/watcher.git"
@@ -18,20 +19,17 @@
     "@types/aws-lambda": "^8.10.109",
     "@types/jasmine": "^4.3.0",
     "@types/node": "^18.11.9",
-    "@typescript-eslint/eslint-plugin": "^5.46.1",
-    "@typescript-eslint/parser": "^5.46.1",
-    "eslint": "^8.30.0",
-    "eslint-config-standard": "^17.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "eslint": "^8.28.0",
+    "eslint-config-standard-with-typescript": "^23.0.0",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jasmine": "^4.1.3",
-    "eslint-plugin-n": "^15.6.0",
+    "eslint-plugin-n": "^15.5.1",
     "eslint-plugin-promise": "^6.1.1",
-    "jasmine": "^3.99.0",
     "jasmine-reporters": "^2.5.0",
     "jasmine-spec-reporter": "^7.0.0",
-    "jasmine-ts": "^0.4.0",
     "ts-node": "^10.9.1",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.4",
+    "jasmine": "^4.5.0"
   },
   "dependencies": {
     "@aws-sdk/client-lambda": "^3.234.0",

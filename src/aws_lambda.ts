@@ -1,4 +1,4 @@
-import { SQSBatchResponse, SQSEvent } from 'aws-lambda/trigger/sqs'
+import { SQSBatchResponse, SQSEvent } from 'aws-lambda/trigger/sqs.js'
 
 export async function handler (event: SQSEvent): Promise<SQSBatchResponse> {
   for (const record of event.Records) {
